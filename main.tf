@@ -153,7 +153,12 @@ resource "aws_security_group" "web" {
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
-
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
   egress {
     from_port   = 0
     to_port     = 0
@@ -211,8 +216,11 @@ resource "aws_instance" "jenkins" {
 
   user_data = <<-EOF
               #!/bin/bash
+              # Update and install dependencies
               sudo apt update -y
-              sudo apt install openjdk-11-jdk -y
+              sudo apt install openjdk-11-jdk unzip -y
+
+              # Install Jenkins
               sudo wget -O /usr/share/keyrings/jenkins-keyring.asc \
                 https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
               echo "deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] \
@@ -222,6 +230,19 @@ resource "aws_instance" "jenkins" {
               sudo apt install jenkins -y
               sudo systemctl start jenkins
               sudo systemctl enable jenkins
+
+              sudo apt install unzip -y
+
+              # Install AWS CLI
+              curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+              unzip awscliv2.zip
+              sudo ./aws/install
+
+              # Update PATH for AWS CLI
+              export PATH=$PATH:/usr/local/bin
+              echo 'export PATH=$PATH:/usr/local/bin' | sudo tee -a /etc/profile
+              source /etc/profile
+
               EOF
 }
 
