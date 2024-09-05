@@ -10,7 +10,7 @@ pipeline {
         
         stage('Deploy to AWS') {
             steps {
-                withAWS(credentials: '662ee533-0a39-4315-b128-8bc8c95ce983', region: 'ap-south-1') {
+                withAWS(credentials: '04f126a3-1e81-4237-adc5-a6e86b7b4b25', region: 'ap-south-1') {
                     sh 'aws deploy create-deployment --application-name web-app --deployment-group-name web-deployment-group --github-location repository=Raghavarora09/task-pipeline,commitId=${GIT_COMMIT}'
                 }
             }
