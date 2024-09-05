@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Mood Board</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        .container {
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+        }
+        #mood-board {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            max-width: 600px;
+            margin: 20px auto;
+        }
+        .mood-tile {
+            width: 100px;
+            height: 100px;
+            margin: 10px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        .mood-tile:hover {
+            transform: scale(1.1);
+        }
+        #add-mood {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        #add-mood:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>My Mood Board</h1>
+        <div id="mood-board"></div>
+        <button id="add-mood">Add Mood</button>
+    </div>
+
+    <script>
+        const moods = ['😊', '😍', '🤔', '😎', '😂', '😴', '😭', '🥳', '😇', '🤩'];
+        const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A', '#98D8C8', '#F7DC6F', '#BB8FCE', '#82E0AA', '#F1948A', '#85C1E9'];
+        
+        function getRandomItem(array) {
+            return array[Math.floor(Math.random() * array.length)];
+        }
+
+        function createMoodTile() {
+            const tile = document.createElement('div');
+            tile.className = 'mood-tile';
+            tile.style.backgroundColor = getRandomItem(colors);
+            tile.textContent = getRandomItem(moods);
+            tile.addEventListener('click', () => tile.remove());
+            return tile;
+        }
+
+        document.getElementById('add-mood').addEventListener('click', () => {
+            const moodBoard = document.getElementById('mood-board');
+            moodBoard.appendChild(createMoodTile());
+        });
+
+        // Initialize with 5 random mood tiles
+        for (let i = 0; i < 5; i++) {
+            document.getElementById('mood-board').appendChild(createMoodTile());
+        }
+    </script>
+</body>
+</html>
