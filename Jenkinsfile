@@ -10,8 +10,8 @@ pipeline {
         
         stage('Deploy to AWS') {
             steps {
-                withAWS(credentials: 'your-aws-credentials-id', region: 'us-west-2') {
-                    sh 'aws deploy create-deployment --application-name web-app --deployment-group-name web-deployment-group --github-location repository=scifigurmeet/justapipeline,commitId=${GIT_COMMIT}'
+                withAWS(credentials: 'your-aws-credentials-id', region: 'ap-south-1') {
+                    sh 'aws deploy create-deployment --application-name web-app --deployment-group-name web-deployment-group --github-location repository=Raghavarora09/task-pipeline,commitId=${GIT_COMMIT}'
                 }
             }
         }
