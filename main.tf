@@ -213,25 +213,25 @@ resource "aws_instance" "jenkins" {
   tags = {
     Name = "jenkins-server"
   }
-
-  user_data = <<-EOF
+user_data = <<-EOF
               #!/bin/bash
               # Update and install dependencies
               sudo apt update -y
-              sudo apt install openjdk-11-jdk unzip -y
+              sudo apt install -y openjdk-17-jdk curl gnupg2 unzip
+
+              # Add Jenkins repository and key (updated for 2024+)
+              curl -fsSL https://pkg.jenkins.io/debian/jenkins.io-2023.key | sudo tee \
+                /usr/share/keyrings/jenkins-keyring.asc > /dev/null
+
+              echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] \
+                https://pkg.jenkins.io/debian binary/ | sudo tee \
+                /etc/apt/sources.list.d/jenkins.list > /dev/null
 
               # Install Jenkins
-              sudo wget -O /usr/share/keyrings/jenkins-keyring.asc \
-                https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
-              echo "deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] \
-                https://pkg.jenkins.io/debian-stable binary/" | sudo tee \
-                /etc/apt/sources.list.d/jenkins.list > /dev/null
               sudo apt update -y
-              sudo apt install jenkins -y
+              sudo apt install -y jenkins
               sudo systemctl start jenkins
               sudo systemctl enable jenkins
-
-              sudo apt install unzip -y
 
               # Install AWS CLI
               curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
